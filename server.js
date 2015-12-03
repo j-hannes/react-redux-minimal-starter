@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const chalk = require('chalk')
-const webpackConfig = require('./build/webpack/development_hot')
+const webpackConfig = require('./webpack.config')
 
 const compiler = webpack(webpackConfig)
 
