@@ -1,14 +1,14 @@
-require('babel/register');
+require('babel/register')
 
-const chalk  = require('chalk');
-const server = require('../server/app');
-const config = require('../config');
+const chalk = require('chalk')
+const server = require('../server/app')
 
-const host = config.get('server_host');
-const port = config.get('server_port');
+const host = 'localhost'
+const port = 3000
 
-server.listen(port, host, function () {
+server.listen(port, host, function() {
+  /* eslint no-console:0 */
   console.log(chalk.green(
     `Server is now running at ${host}:${port}.`
-  ));
-});
+  ))
+})
