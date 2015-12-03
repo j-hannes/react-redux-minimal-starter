@@ -6,15 +6,11 @@
   "scripts": {
     "clean": "rm -rf dist",
     "lint": "eslint ./src/**/*.js",
-    "lint:tests": "eslint ./tests/**/*.spec.js",
     "compile": "webpack",
     "start": "npm run dev",
     "dev": "node --harmony bin/server",
     "dev:nw": "npm run dev -- --nw",
-    "dev:no-debug": "npm run dev -- --no_debug",
-    "test": "node ./node_modules/karma/bin/karma start",
-    "test:dev": "npm run test -- --watch",
-    "deploy": "npm run lint && npm run test && npm run compile"
+    "dev:no-debug": "npm run dev -- --no_debug"
   },
   "repository": {
     "type": "git",
@@ -53,15 +49,6 @@
     "file-loader": "^0.8.4",
     "html-webpack-plugin": "^1.6.1",
     "isparta-loader": "^1.0.0",
-    "karma": "^0.13.8",
-    "karma-chai": "^0.1.0",
-    "karma-chai-as-promised": "^0.1.2",
-    "karma-coverage": "^0.5.0",
-    "karma-mocha": "^0.2.0",
-    "karma-phantomjs-launcher": "^0.2.1",
-    "karma-sinon-chai": "^1.0.0",
-    "karma-spec-reporter": "0.0.22",
-    "karma-webpack": "^1.7.0",
     "mocha": "^2.2.5",
     "node-sass": "^3.3.3",
     "phantomjs": "^1.9.17",

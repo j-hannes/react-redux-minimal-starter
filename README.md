@@ -39,10 +39,6 @@ Features
   * redux-thunk middleware
 * [react-router](https://github.com/rackt/react-router) (`^1.0.0`)
 * [redux-simple-router](https://github.com/jlongster/redux-simple-router) (`^0.0.10`)
-* [Karma](https://github.com/karma-runner/karma)
-  * Mocha w/ Chai, Sinon-Chai, and Chai-as-Promised
-  * PhantomJS
-  * Code coverage reports
 * [Babel](https://github.com/babel/babel)
   * `react-transform-hmr` for hot reloading
   * `react-transform-catch-errors` with `redbox-react` for more visible error reporting
@@ -94,20 +90,8 @@ Same as `npm start` but disables redux dev tools.
 #### `npm run compile`
 Runs the webpack build system **with your current NODE_ENV** and compiles the application to disk (`~/dist` by default).
 
-#### `npm run test`
-Runs unit tests with Karma and generates coverage reports.
-
-#### `npm run test:dev`
-Similar to `npm run test`, but will watch for changes and re-run tests; does not generate coverage reports.
-
 #### `npm run lint`
 Runs ESLint against all `.js` files in `~/src`. This used to be a webpack preloader, but the browser console output could get fairly ugly. If you want development-time linting, consider using an ESLint plugin for your text editor.
-
-#### `npm run lint:tests`
-Lints all `.spec.js` files in of `~/tests`.
-
-#### `npm run deploy`
-Helper script to run linter, tests, and then, on success, compile your application to disk.
 
 ### Configuration
 
@@ -146,7 +130,6 @@ The folder structure provided is only meant to serve as a guide, it is by no mea
 │   ├── utils                # Generic utilities
 │   ├── views                # Components that live at a route
 │   └── app.js               # Application bootstrap and rendering
-└── tests                    # Unit tests
 ```
 
 ### Components vs. Views vs. Layouts
@@ -239,13 +222,6 @@ Here's an example:
 // can now be this:
 @import 'base';
 ```
-
-Testing
--------
-
-To add a unit test, simply create a `.spec.js` file anywhere in `~/tests`. Karma will pick up on these files automatically, and Mocha and Chai will be available within your test without the need to import them.
-
-Coverage reports will be compiled to `~/coverage` by default. If you wish to change what reporters are used and where reports are compiled, you can do so by modifying `coverage_reporters` in `~/config/index.js`.
 
 Utilities
 ---------
