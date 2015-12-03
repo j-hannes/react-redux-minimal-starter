@@ -16,8 +16,6 @@ const node = (
   <Root
     history={history}
     store={store}
-    debug={true}
-    debugExternal={false}
   />
 )
 
