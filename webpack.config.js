@@ -48,10 +48,13 @@ config.set('utils_aliases', [
 
 const webpackConfig = {
   name: 'client',
+  devtool: 'source-map',
   target: 'web',
   entry: {
     app: [
-      './src/app.js'
+      './src/app.js',
+      'webpack/hot/dev-server',
+      'webpack-hot-middleware/client?path=/__webpack_hmr'
     ],
     vendor: config.get('vendor_dependencies')
   },
@@ -63,14 +66,12 @@ const webpackConfig = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      hash: false,
       filename: 'index.html',
-      inject: 'body',
-      minify: {
-        collapseWhitespace: true
-      }
+      inject: 'body'
     })
   ],
   resolve: {
@@ -146,31 +147,6 @@ const webpackConfig = {
   ]
 }
 
-// NOTE: this is a temporary workaround. I don't know how to get Karma
-// to include the vendor bundle that webpack creates, so to get around that
-// we remove the bundle splitting when webpack is used with Karma.
-const commonChunkPlugin = new webpack.optimize.CommonsChunkPlugin(
-  'vendor', '[name].[hash].js'
-)
-commonChunkPlugin.__KARMA_IGNORE__ = true
-webpackConfig.plugins.push(commonChunkPlugin)
-
-webpackConfig.devtool = 'source-map'
-
-webpackConfig.entry.app.push(
-  `webpack-hot-middleware/client?path=/__webpack_hmr`,
-  `webpack/hot/dev-server`
-)
-
-webpackConfig.plugins.push(
-  new webpack.HotModuleReplacementPlugin(),
-  new webpack.NoErrorsPlugin()
-)
-
-// We need to apply the react-transform HMR plugin to the Babel configuration,
-// but _only_ when HMR is enabled. Putting this in the default development
-// configuration will break other tasks such as test:unit because Webpack
-// HMR is not enabled there, and these transforms require it.
 webpackConfig.module.loaders = webpackConfig.module.loaders.map(loader => {
   if (/js(?!on)/.test(loader.test)) {
     loader.query.env.development.extra['react-transform'].transforms.push({
