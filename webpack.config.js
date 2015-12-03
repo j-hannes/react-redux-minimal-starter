@@ -3,40 +3,17 @@ require('babel/register')
 
 const webpack = require('webpack')
 const path = require('path')
-const argv = require('yargs').argv
 const dotenv = require('dotenv')
 const chalk = require('chalk')
 const cssnano = require('cssnano')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const pkg = require('./package.json')
 
 dotenv.load()
+
 const config = new Map()
 
-// ------------------------------------
-// User Configuration
-// ------------------------------------
-config.set('dir_src', 'src')
-config.set('dir_dist', 'dist')
-config.set('dir_test', 'tests')
-
-config.set('coverage_enabled', !argv.watch) // enabled if not in watch mode
-config.set('coverage_reporters', [{
-  type: 'text-summary'
-}, {
-  type: 'html',
-  dir: 'coverage'
-}])
-
-config.set('server_host', 'localhost')
-config.set('server_port', process.env.PORT || 3000)
-
-config.set('production_enable_source_maps', false)
-
-// Define what dependencies we'd like to treat as vendor dependencies,
-// but only include the ones that actually exist in package.json. This
-// makes it easier to remove dependencies without breaking the
-// vendor bundle.
 config.set('vendor_dependencies', [
   'history',
   'react',
@@ -54,58 +31,6 @@ config.set('vendor_dependencies', [
   ))
 }))
 
-/*  *********************************************
--------------------------------------------------
-
-All Internal Configuration Below
-Edit at Your Own Risk
-
--------------------------------------------------
-************************************************/
-// ------------------------------------
-// Environment
-// ------------------------------------
-config.set('env', process.env.NODE_ENV)
-config.set('globals', {
-  'process.env': {
-    'NODE_ENV': JSON.stringify(config.get('env'))
-  },
-  'NODE_ENV': config.get('env'),
-  '__DEV__': config.get('env') === 'development',
-  '__PROD__': config.get('env') === 'production',
-  '__DEBUG__': config.get('env') === 'development' && !argv.no_debug,
-  '__DEBUG_NW__': !!argv.nw
-})
-
-// ------------------------------------
-// Webpack
-// ------------------------------------
-config.set('webpack_public_path',
-  `http://${config.get('webpack_host')}:${config.get('webpack_port')}/`
-)
-
-// ------------------------------------
-// Project
-// ------------------------------------
-config.set('path_project', path.resolve(__dirname, './'))
-
-// ------------------------------------
-// Utilities
-// ------------------------------------
-const paths = (() => {
-  const base = [config.get('path_project')]
-  const resolve = path.resolve
-
-  const project = (...args) => resolve.apply(resolve, [...base, ...args])
-
-  return {
-    project: project,
-    src: project.bind(null, config.get('dir_src')),
-    dist: project.bind(null, config.get('dir_dist'))
-  }
-})()
-
-config.set('utils_paths', paths)
 config.set('utils_aliases', [
   'actions',
   'components',
@@ -119,30 +44,27 @@ config.set('utils_aliases', [
   'styles',
   'utils',
   'views'
-].reduce((acc, dir) => ((acc[dir] = paths.src(dir)) && acc), {}))
-
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+].reduce((acc, dir) => ((acc[dir] = path.resolve('./src/' + dir)) && acc), {}))
 
 const webpackConfig = {
   name: 'client',
   target: 'web',
   entry: {
     app: [
-      paths.project(config.get('dir_src')) + '/app.js'
+      './src/app.js'
     ],
     vendor: config.get('vendor_dependencies')
   },
   output: {
     filename: '[name].[hash].js',
-    path: paths.project(config.get('dir_dist')),
+    path: path.resolve('./dist'),
     publicPath: '/'
   },
   plugins: [
-    new webpack.DefinePlugin(config.get('globals')),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
     new HtmlWebpackPlugin({
-      template: paths.src('index.html'),
+      template: './src/index.html',
       hash: false,
       filename: 'index.html',
       inject: 'body',
@@ -208,7 +130,7 @@ const webpackConfig = {
     ]
   },
   sassLoader: {
-    includePaths: paths.src('styles')
+    includePaths: path.resolve('./src/styles')
   },
   postcss: [
     cssnano({
