@@ -1,9 +1,7 @@
 /* eslint no-console:0 */
-require('babel/register')
 
 const webpack = require('webpack')
 const path = require('path')
-const cssnano = require('cssnano')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const resolvePath = (acc, dir) =>
@@ -54,7 +52,6 @@ const webpackConfig = {
       'routes',
       'services',
       'store',
-      'styles',
       'utils',
       'views'
     ].reduce(resolvePath, {})
@@ -66,78 +63,26 @@ const webpackConfig = {
         exclude: /node_modules/,
         loader: 'babel',
         query: {
-          stage: 0,
-          optional: ['runtime'],
-          env: {
-            development: {
-              plugins: ['react-transform'],
-              extra: {
-                'react-transform': {
-                  transforms: [{
-                    transform: 'react-transform-catch-errors',
-                    imports: ['react', 'redbox-react']
-                  }]
-                }
-              }
+          plugins: ['react-transform'],
+          extra: {
+            'react-transform': {
+              transforms: [{
+                transform: 'react-transform-catch-errors',
+                imports: ['react', 'redbox-react']
+              }]
             }
           }
         }
       }, {
         test: /\.scss$/,
-        loaders: [
-          'style-loader',
-          'css-loader',
-          'postcss-loader',
-          'sass-loader'
-        ]
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
-      /* eslint-disable */
       {
-        test: /\.woff(\?.*)?$/,
-        loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff"
-      }, {
-        test: /\.woff2(\?.*)?$/,
-        loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2"
-      }, {
-        test: /\.ttf(\?.*)?$/,
-        loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/octet-stream"
-      }, {
-        test: /\.eot(\?.*)?$/,
-        loader: "file-loader?prefix=fonts/&name=[path][name].[ext]"
-      }, {
-        test: /\.svg(\?.*)?$/,
-        loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml"
+        test: /\.(woff2?|ttf|eot|svg)(\?.*)?$/,
+        loader: 'url-loader'
       }
-      /* eslint-enable */
     ]
-  },
-  sassLoader: {
-    includePaths: path.resolve('./src/styles')
-  },
-  postcss: [
-    cssnano({
-      autoprefixer: {
-        add: true,
-        remove: true,
-        browsers: ['last 2 versions']
-      },
-      discardComments: {
-        removeAll: true
-      }
-    })
-  ]
-}
-
-webpackConfig.module.loaders = webpackConfig.module.loaders.map(loader => {
-  if (/js(?!on)/.test(loader.test)) {
-    loader.query.env.development.extra['react-transform'].transforms.push({
-      transform: 'react-transform-hmr',
-      imports: ['react'],
-      locals: ['module']
-    })
   }
-
-  return loader
-})
+}
 
 export default webpackConfig
