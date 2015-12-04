@@ -3,9 +3,9 @@ import { Link } from 'react-router'
 
 const AboutView = () => (
   <div className="container text-center">
-    <h1>This is the about view!</h1>
+    <h2>about view</h2>
     <hr />
-    <Link to="/">Back To Home View</Link>
+    <Link to="/">home view</Link>
   </div>
 )
 

@@ -14,17 +14,19 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export class HomeView extends React.Component {
-  render () {
+  render() {
     return (
-      <div className='container text-center'>
-        <h1>Welcome to the React Redux Starter Kit</h1>
-        <h2>Sample Counter: {this.props.counter}</h2>
-        <button className='btn btn-default'
-                onClick={this.props.actions.increment}>
-          Increment
+      <div className="container text-center">
+        <h2>react redux minimal starter</h2>
+        <h4>sample counter: {this.props.counter}</h4>
+        <button
+          className="btn btn-default"
+          onClick={this.props.actions.increment}
+        >
+          increment
         </button>
         <hr />
-        <Link to='/about'>Go To About View</Link>
+        <Link to="/about">about view</Link>
       </div>
     )
   }
