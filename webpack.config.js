@@ -4,47 +4,10 @@ require('babel/register')
 const webpack = require('webpack')
 const path = require('path')
 const dotenv = require('dotenv')
-const chalk = require('chalk')
 const cssnano = require('cssnano')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const pkg = require('./package.json')
-
 dotenv.load()
-
-const config = new Map()
-
-config.set('vendor_dependencies', [
-  'history',
-  'react',
-  'react-redux',
-  'react-router',
-  'redux',
-  'redux-simple-router'
-].filter(dep => {
-  if (pkg.dependencies[dep]) return true
-
-  console.log(chalk.yellow(
-    `Package "${dep}" was not found as an npm dependency and won't be ` +
-    `included in the vendor bundle.\n` +
-    `Consider removing it from vendor_dependencies in ~/config/index.js`
-  ))
-}))
-
-config.set('utils_aliases', [
-  'actions',
-  'components',
-  'constants',
-  'containers',
-  'layouts',
-  'reducers',
-  'routes',
-  'services',
-  'store',
-  'styles',
-  'utils',
-  'views'
-].reduce((acc, dir) => ((acc[dir] = path.resolve('./src/' + dir)) && acc), {}))
 
 const webpackConfig = {
   name: 'client',
@@ -56,7 +19,14 @@ const webpackConfig = {
       'webpack/hot/dev-server',
       'webpack-hot-middleware/client?path=/__webpack_hmr'
     ],
-    vendor: config.get('vendor_dependencies')
+    vendor: [
+      'history',
+      'react',
+      'react-redux',
+      'react-router',
+      'redux',
+      'redux-simple-router'
+    ]
   },
   output: {
     filename: '[name].[hash].js',
@@ -76,7 +46,20 @@ const webpackConfig = {
   ],
   resolve: {
     extensions: ['', '.js', '.jsx'],
-    alias: config.get('utils_aliases')
+    alias: [
+      'actions',
+      'components',
+      'constants',
+      'containers',
+      'layouts',
+      'reducers',
+      'routes',
+      'services',
+      'store',
+      'styles',
+      'utils',
+      'views'
+    ].reduce((acc, dir) => ((acc[dir] = path.resolve('./src/' + dir)) && acc), {})
   },
   module: {
     loaders: [
