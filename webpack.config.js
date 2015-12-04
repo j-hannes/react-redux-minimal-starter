@@ -3,11 +3,8 @@ require('babel/register')
 
 const webpack = require('webpack')
 const path = require('path')
-const dotenv = require('dotenv')
 const cssnano = require('cssnano')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-dotenv.load()
 
 const webpackConfig = {
   name: 'client',
