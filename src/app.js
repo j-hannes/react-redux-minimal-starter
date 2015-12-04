@@ -5,6 +5,8 @@ import { syncReduxAndRouter } from 'redux-simple-router'
 import Root from './containers/Root'
 import configureStore from './store/configureStore'
 
+import 'bootstrap/dist/css/bootstrap.css'
+
 const target = document.getElementById('root')
 const history = createBrowserHistory()
 const store = configureStore(window.__INITIAL_STATE__, true)
