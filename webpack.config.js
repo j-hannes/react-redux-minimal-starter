@@ -6,6 +6,9 @@ const path = require('path')
 const cssnano = require('cssnano')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+const resolvePath = (acc, dir) =>
+    (acc[dir] = path.resolve('./src/' + dir)) && acc
+
 const webpackConfig = {
   name: 'client',
   devtool: 'source-map',
@@ -56,7 +59,7 @@ const webpackConfig = {
       'styles',
       'utils',
       'views'
-    ].reduce((acc, dir) => ((acc[dir] = path.resolve('./src/' + dir)) && acc), {})
+    ].reduce(resolvePath, {})
   },
   module: {
     loaders: [
